@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="description" content="A list of all available games Nvidia GeForce NOW has to offer.">
+  <meta name="author" content="Jacques Aissa">
+  <meta property="og:url" content="index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="My Films List" />
+  <meta property="og:description" content="A list of all my films." />
+  <meta property="og:image" content="filmslist.jpg" />
+  <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+
+  <title>My Films App</title>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="vendor/datatables.min.css" />
+  <script src="vendor/datatables.min.js"></script>
+
+
+</head>
+
+<body>
+
+<style media="screen">
+
+  html,
+  body {
+    height: 100%;
+    font-family: geforcenow;
+     !important
+  }
+
+  li {
+    list-style-type: none;
+    display: inline;
+  }
+
+  img {
+    width: 100px;
+  }
+
+  .navbar-dark .navbar-brand {
+    font-family: 'geforce-bold' !important;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  li.nav-item {
+    text-transform: uppercase;
+    font-family: geforce-bold;
+  }
+
+  td.sorting_1 {
+    font-weight: 600;
+  }
+
+  .p-5 {
+    padding: 0.5rem !important;
+  }
+
+  .bg-dark {
+    background-color: #76b900 !important;
+  }
+
+  thead {
+    text-transform: uppercase;
+    color: #76b900 !important;
+    font-family: geforce-bold;
+  }
+
+  tfoot {
+    display: table-header-group;
+  }
+
+  /* Other Classes for Page Styling */
+
+  @font-face {
+    font-family: "geforcenow";
+    src: url("fonts/geforce-light.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "geforce-bold";
+    src: url("fonts/geforce-bold.ttf") format("truetype");
+  }
+
+  .nav-pills .nav-link.active,
+  .nav-pills .show>.nav-link {
+    color: #fff;
+    font-weight: bold;
+    margin-left: 5px;
+    text-transform: uppercase;
+    background-color: #76b900;
+  }
+
+  .upcase {
+    text-transform: uppercase;
+  }
+</style>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <a class="navbar-brand" href="/">My films List</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
+        </li>
+    </div>
+  </nav>
+
+  <div class="card-body p-5">
+    <h4>Films List</h4>
+    <p>This list contains the films I like.</p>
+    <div class="table-responsive">
+      <table id="filmslist" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Star</th>
+            <th>Year</th>
+            <th>Country</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>title...</th>
+            <th>director...</th>
+            <th>star...</th>
+            <th>year...</th>
+            <th>country...</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#filmslist').DataTable({
+        "ajax": "data.json",
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "blengthchange": true,
+        "lengthChange": false,
+        "paging": true,
+        "pageLength": 50,
+        "pagingType": "full_numbers",
+        "dom": 'lrtip',
+        "columns": [{
+          "data": "title",
+          "render": function(data, type, row, meta){
+              if(type === 'display'){
+                  data = '<a href="/film/tt0053472">' + data + '</a>';
+              }
+              return data;
+          }
+        }, {
+          "data": "director"
+        }, {
+          "data": "star"
+        }, {
+          "data": "year"
+        }, {
+          "data": "country"
+        }]
+      });
+      $('#filmslist tfoot th').each(function() {
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+      });
+      var table = $('#filmslist').DataTable();
+      table.columns().every(function() {
+        var that = this;
+        $('input', this.footer()).on('keyup change clear', function() {
+          if (that.search() !== this.value) {
+            that.search(this.value).draw();
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
